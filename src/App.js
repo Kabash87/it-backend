@@ -1,24 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Admin, Resource } from "react-admin";
+import { dataProvider, authProvider } from "./providers";
+
+import {
+  ProductosList,
+  ProductosEdit,
+  ProductosCreate,
+} from "./componentes/Productos";
+
+import {
+  PromocionesList,
+  PromocionesCreate,
+  PromocionesEdit,
+} from "./componentes/Promociones";
+
+import {
+  PublicacionesList,
+  PublicacionesCreate,
+  PublicacionesEdit,
+} from "./componentes/Publicaciones";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Admin dataProvider={dataProvider} authProvider={authProvider}>
+      <Resource
+        name="productos"
+        list={ProductosList}
+        edit={ProductosEdit}
+        create={ProductosCreate}
+      />
+      <Resource
+        name="promociones"
+        list={PromocionesList}
+        create={PromocionesCreate}
+        edit={PromocionesEdit}
+      />
+      <Resource
+        name="publicaciones"
+        list={PublicacionesList}
+        create={PublicacionesCreate}
+        edit={PublicacionesEdit}
+      />
+    </Admin>
   );
 }
 
