@@ -20,9 +20,18 @@ import {
   PublicacionesEdit,
 } from "./componentes/Publicaciones";
 
+import Dashboard from "./componentes/Dashboard";
+import Login from "./componentes/Login";
+
 function App() {
   return (
-    <Admin dataProvider={dataProvider} authProvider={authProvider}>
+    <Admin
+      dashboard={Dashboard}
+      loginPage={Login}
+      dataProvider={dataProvider}
+      authProvider={authProvider}
+      disableTelemetry
+    >
       <Resource
         name="productos"
         list={ProductosList}
