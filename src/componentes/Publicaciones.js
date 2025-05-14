@@ -1,5 +1,3 @@
-// Publicaciones.js
-// Este componente sirve para CRUD de publicaciones
 import React from "react";
 import {
   List,
@@ -12,17 +10,56 @@ import {
   TextInput,
   EditButton,
   DeleteButton,
-  useRecordContext,
   DateTimeInput,
+  useRecordContext,
 } from "react-admin";
 import { Timestamp } from "firebase/firestore";
 
+/**
+ * Convierte cualquier valor de fecha (string, JS Date, Luxon DateTime, Firestore Timestamp)
+ * en un Firestore Timestamp, o null.
+ */
+const toFirestoreTimestamp = (value) => {
+  if (!value) return null;
+
+  // Si viene un Timestamp de Firestore, lo devolvemos directo
+  if (value instanceof Timestamp) {
+    return value;
+  }
+
+  if (typeof value.toJSDate === "function") {
+    return Timestamp.fromDate(value.toJSDate());
+  }
+
+  const date = value instanceof Date ? value : new Date(value);
+  return isNaN(date.getTime()) ? null : Timestamp.fromDate(date);
+};
+
 const transformFecha = (data) => ({
   ...data,
-  fecha: data.fecha ? Timestamp.fromDate(new Date(data.fecha)) : null,
+  fecha: toFirestoreTimestamp(data.fecha),
 });
 
-// Miniatura de imagen
+const DateTimeInputFirebase = (props) => (
+  <DateTimeInput
+    {...props}
+    format={(value) => {
+      if (!value) return "";
+      // Timestamp de Firestore
+      if (value.toDate) return value.toDate();
+      // Luxon DateTime
+      if (typeof value.toJSDate === "function") return value.toJSDate();
+      // JS Date o string
+      const d = value instanceof Date ? value : new Date(value);
+      return isNaN(d.getTime()) ? "" : d;
+    }}
+    parse={(value) => toFirestoreTimestamp(value)}
+  />
+);
+
+/**
+ * Miniatura de imagen en la lista
+ */
 const ImagenPub = () => {
   const record = useRecordContext();
   if (!record || !record.imagen) return null;
@@ -30,46 +67,51 @@ const ImagenPub = () => {
     <img
       src={record.imagen}
       alt={record.titulo}
-      style={{ height: 50, objectFit: "cover", borderRadius: 8 }}
+      style={{ height: 50, objectFit: "cover", borderRadius: 4 }}
     />
   );
 };
 
-// Lista de publicaciones
+/**
+ * Reutilizamos el mismo formulario para Create y Edit
+ */
+const PublicacionForm = () => (
+  <>
+    <TextInput source="titulo" label="Título" fullWidth />
+    <TextInput source="descripcion" label="Descripción" multiline fullWidth />
+    <TextInput source="imagen" label="URL de la imagen" fullWidth />
+    <TextInput source="enlace" label="Enlace" fullWidth />
+    <DateTimeInputFirebase source="fecha" label="Fecha y hora" />
+  </>
+);
+
+/** Lista */
 export const PublicacionesList = () => (
   <List>
     <Datagrid rowClick="edit">
       <TextField source="titulo" />
       <ImagenPub label="Imagen" />
-      <DateField source="fecha" />
+      <DateField source="fecha" showTime label="Fecha y hora" />
       <EditButton />
       <DeleteButton />
     </Datagrid>
   </List>
 );
 
-// Crear publicacion
+/** Crear */
 export const PublicacionesCreate = () => (
   <Create transform={transformFecha}>
     <SimpleForm>
-      <TextInput source="titulo" label="Titulo" fullWidth />
-      <TextInput source="descripcion" label="Descripcion" multiline fullWidth />
-      <TextInput source="imagen" label="URL imagen" fullWidth />
-      <TextInput source="enlace" label="Enlace" fullWidth />
-      <DateTimeInput source="fecha" label="Fecha y hora" />
+      <PublicacionForm />
     </SimpleForm>
   </Create>
 );
 
-// Editar publicacion
+/** Editar */
 export const PublicacionesEdit = () => (
   <Edit transform={transformFecha}>
     <SimpleForm>
-      <TextInput source="titulo" label="Titulo" fullWidth />
-      <TextInput source="descripcion" label="Descripcion" multiline fullWidth />
-      <TextInput source="imagen" label="URL imagen" fullWidth />
-      <TextInput source="enlace" label="Enlace" fullWidth />
-      <DateTimeInput source="fecha" label="Fecha y hora" />
+      <PublicacionForm />
     </SimpleForm>
   </Edit>
 );
