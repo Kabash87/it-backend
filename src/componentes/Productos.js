@@ -21,7 +21,7 @@ const categoriaChoices = [
   { id: "Pizza", name: "Pizza" },
   { id: "Pasta", name: "Pasta" },
   { id: "Antipasti", name: "Antipasti" },
-  { id: "Ensalada", name: "Ensalada" },
+  { id: "Ensaladas", name: "Ensaladas" },
   { id: "Bebidas", name: "Bebidas" },
   { id: "Postres", name: "Postres" },
 ];
