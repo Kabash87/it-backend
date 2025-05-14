@@ -14,6 +14,7 @@ import {
   EditButton,
   DeleteButton,
   useRecordContext,
+  DateTimeInput,
 } from "react-admin";
 
 // Miniatura de imagen
@@ -50,7 +51,13 @@ export const PublicacionesCreate = () => (
       <TextInput source="descripcion" label="Descripcion" multiline fullWidth />
       <TextInput source="imagen" label="URL imagen" fullWidth />
       <TextInput source="enlace" label="Enlace" fullWidth />
-      <DateInput source="fecha" label="Fecha" />
+      <DateTimeInput
+        source="fecha"
+        label="Fecha y hora"
+        options={{
+          format: 'dd "de" MMMM "de" yyyy, hh:mm:ss a',
+        }}
+      />
     </SimpleForm>
   </Create>
 );
@@ -63,7 +70,13 @@ export const PublicacionesEdit = () => (
       <TextInput source="descripcion" label="Descripcion" multiline fullWidth />
       <TextInput source="imagen" label="URL imagen" fullWidth />
       <TextInput source="enlace" label="Enlace" fullWidth />
-      <DateInput source="fecha" label="Fecha" />
+      <DateTimeInput
+        source="fecha"
+        label="Fecha y hora"
+        options={{
+          format: 'dd "de" MMMM "de" yyyy, hh:mm:ss a',
+        }}
+      />
     </SimpleForm>
   </Edit>
 );
