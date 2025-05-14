@@ -10,12 +10,17 @@ import {
   Create,
   SimpleForm,
   TextInput,
-  DateInput,
   EditButton,
   DeleteButton,
   useRecordContext,
   DateTimeInput,
 } from "react-admin";
+import { Timestamp } from "firebase/firestore";
+
+const transformFecha = (data) => ({
+  ...data,
+  fecha: data.fecha ? Timestamp.fromDate(new Date(data.fecha)) : null,
+});
 
 // Miniatura de imagen
 const ImagenPub = () => {
@@ -45,38 +50,26 @@ export const PublicacionesList = () => (
 
 // Crear publicacion
 export const PublicacionesCreate = () => (
-  <Create>
+  <Create transform={transformFecha}>
     <SimpleForm>
       <TextInput source="titulo" label="Titulo" fullWidth />
       <TextInput source="descripcion" label="Descripcion" multiline fullWidth />
       <TextInput source="imagen" label="URL imagen" fullWidth />
       <TextInput source="enlace" label="Enlace" fullWidth />
-      <DateTimeInput
-        source="fecha"
-        label="Fecha y hora"
-        options={{
-          format: 'dd "de" MMMM "de" yyyy, hh:mm:ss a',
-        }}
-      />
+      <DateTimeInput source="fecha" label="Fecha y hora" />
     </SimpleForm>
   </Create>
 );
 
 // Editar publicacion
 export const PublicacionesEdit = () => (
-  <Edit>
+  <Edit transform={transformFecha}>
     <SimpleForm>
       <TextInput source="titulo" label="Titulo" fullWidth />
       <TextInput source="descripcion" label="Descripcion" multiline fullWidth />
       <TextInput source="imagen" label="URL imagen" fullWidth />
       <TextInput source="enlace" label="Enlace" fullWidth />
-      <DateTimeInput
-        source="fecha"
-        label="Fecha y hora"
-        options={{
-          format: 'dd "de" MMMM "de" yyyy, hh:mm:ss a',
-        }}
-      />
+      <DateTimeInput source="fecha" label="Fecha y hora" />
     </SimpleForm>
   </Edit>
 );
