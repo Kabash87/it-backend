@@ -11,10 +11,16 @@ import firebaseConfig from "./firebaseConfig";
 // Inicializa Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Opciones: solo logging, sin rootRef (“data” apuntaba a una colección)
 const options = {
   logging: true,
-  // rootRef: 'coleccion/documento'
+  rootRef: "",
+  watch: [
+    "productos",
+    "promociones",
+    "publicaciones",
+    "coupons",
+    "redemptions",
+  ],
 };
 
 export const dataProvider = FirebaseDataProvider(firebaseConfig, options);

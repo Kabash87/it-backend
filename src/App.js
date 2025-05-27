@@ -1,6 +1,8 @@
 import React from "react";
 import { Admin, Resource } from "react-admin";
 import { dataProvider, authProvider } from "./providers";
+import { CouponList, CouponCreate, CouponEdit } from "./componentes/coupons";
+import { RedemptionList } from "./componentes/redemptions";
 
 import {
   ProductosList,
@@ -49,6 +51,18 @@ function App() {
         list={PublicacionesList}
         create={PublicacionesCreate}
         edit={PublicacionesEdit}
+      />
+      <Resource
+        name="coupons"
+        list={CouponList}
+        create={CouponCreate}
+        edit={CouponEdit}
+        options={{ label: "Cupones" }}
+      />
+      <Resource
+        name="redemptions"
+        list={RedemptionList}
+        options={{ label: "Canjeados" }}
       />
     </Admin>
   );

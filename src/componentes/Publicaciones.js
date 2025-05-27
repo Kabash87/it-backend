@@ -15,10 +15,6 @@ import {
 } from "react-admin";
 import { Timestamp } from "firebase/firestore";
 
-/**
- * Convierte cualquier valor de fecha (string, JS Date, Luxon DateTime, Firestore Timestamp)
- * en un Firestore Timestamp, o null.
- */
 const toFirestoreTimestamp = (value) => {
   if (!value) return null;
 
@@ -58,7 +54,7 @@ const DateTimeInputFirebase = (props) => (
 );
 
 /**
- * Miniatura de imagen en la lista
+ * Miniatura de imagen
  */
 const ImagenPub = () => {
   const record = useRecordContext();
@@ -72,9 +68,6 @@ const ImagenPub = () => {
   );
 };
 
-/**
- * Reutilizamos el mismo formulario para Create y Edit
- */
 const PublicacionForm = () => (
   <>
     <TextInput source="titulo" label="Título" fullWidth />
