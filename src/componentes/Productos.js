@@ -24,6 +24,8 @@ const categoriaChoices = [
   { id: "Ensaladas", name: "Ensaladas" },
   { id: "Bebidas", name: "Bebidas" },
   { id: "Postres", name: "Postres" },
+  { id: "Vinos", name: "Vinos" },
+  { id: "Cafe", name: "Cafe" },
 ];
 
 // Miniatura de la imagen
