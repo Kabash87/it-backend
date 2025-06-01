@@ -10,48 +10,8 @@ import {
   TextInput,
   EditButton,
   DeleteButton,
-  DateTimeInput,
   useRecordContext,
 } from "react-admin";
-import { Timestamp } from "firebase/firestore";
-
-const toFirestoreTimestamp = (value) => {
-  if (!value) return null;
-
-  // Si viene un Timestamp de Firestore, lo devolvemos directo
-  if (value instanceof Timestamp) {
-    return value;
-  }
-
-  if (typeof value.toJSDate === "function") {
-    return Timestamp.fromDate(value.toJSDate());
-  }
-
-  const date = value instanceof Date ? value : new Date(value);
-  return isNaN(date.getTime()) ? null : Timestamp.fromDate(date);
-};
-
-const transformFecha = (data) => ({
-  ...data,
-  fecha: toFirestoreTimestamp(data.fecha),
-});
-
-const DateTimeInputFirebase = (props) => (
-  <DateTimeInput
-    {...props}
-    format={(value) => {
-      if (!value) return "";
-      // Timestamp de Firestore
-      if (value.toDate) return value.toDate();
-      // Luxon DateTime
-      if (typeof value.toJSDate === "function") return value.toJSDate();
-      // JS Date o string
-      const d = value instanceof Date ? value : new Date(value);
-      return isNaN(d.getTime()) ? "" : d;
-    }}
-    parse={(value) => toFirestoreTimestamp(value)}
-  />
-);
 
 /**
  * Miniatura de imagen
@@ -74,7 +34,6 @@ const PublicacionForm = () => (
     <TextInput source="descripcion" label="Descripción" multiline fullWidth />
     <TextInput source="imagen" label="URL de la imagen" fullWidth />
     <TextInput source="enlace" label="Enlace" fullWidth />
-    <DateTimeInputFirebase source="fecha" label="Fecha y hora" />
   </>
 );
 
@@ -84,7 +43,7 @@ export const PublicacionesList = () => (
     <Datagrid rowClick="edit">
       <TextField source="titulo" />
       <ImagenPub label="Imagen" />
-      <DateField source="fecha" showTime label="Fecha y hora" />
+      <DateField source="createdate" showTime label="Fecha y hora" />
       <EditButton />
       <DeleteButton />
     </Datagrid>
@@ -93,7 +52,8 @@ export const PublicacionesList = () => (
 
 /** Crear */
 export const PublicacionesCreate = () => (
-  <Create transform={transformFecha}>
+  <Create>
+    {/* SimpleForm permite usar validaciones y otras características */}
     <SimpleForm>
       <PublicacionForm />
     </SimpleForm>
@@ -102,7 +62,7 @@ export const PublicacionesCreate = () => (
 
 /** Editar */
 export const PublicacionesEdit = () => (
-  <Edit transform={transformFecha}>
+  <Edit>
     <SimpleForm>
       <PublicacionForm />
     </SimpleForm>
